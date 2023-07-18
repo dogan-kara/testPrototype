@@ -44,6 +44,7 @@ const Charts = () => {
             WIP Snapshot <InfoIcon />
           </div>
           <ReactECharts
+            opts={{ renderer: "svg" }}
             style={{
               height: "160px",
             }}
@@ -101,26 +102,37 @@ const Charts = () => {
                   show: false,
                 },
               },
+              tooltip: {
+                valueFormatter: (v) => v - 30,
+              },
               series: [
                 {
                   type: "bar",
-                  data: [610, 120, 220, 50],
+                  data: [610, 120, 220, 50].map((v) => ({
+                    value: v + 30,
+                    label: {
+                      formatter: () => `£ ${v.toLocaleString("en-GB")}K`,
+                    },
+                  })),
                   roundCap: true,
                   showSymbol: false,
                   itemStyle: {
-                    borderRadius: [2, 2, 2, 2],
+                    borderRadius: [20, 20, 20, 20],
                     color: (p) =>
                       ["#0497A9", "#007583", "#28525B", "#1D1E27"][p.dataIndex],
                   },
                   label: {
                     show: true,
-                    position: "insideRight",
+                    position: "insideLeft",
+                    padding: 10,
+                    textBorderWidth: 0,
+                    textBorderColor: "#0002",
                     distance: 20,
                     align: "center",
                     verticalAlign: "center",
                     rotate: 0,
-                    formatter: (p) =>
-                      "£" + p.value.toLocaleString("en-GB") + "K",
+                    // formatter: (p) => `£ ${p.value.toLocaleString("en-GB")}K`,
+                    // "£" + p.value.toLocaleString("en-GB") + "K",
                     fontSize: 10,
                     fontWeight: 600,
                   },
@@ -135,6 +147,7 @@ const Charts = () => {
             <InfoIcon />
           </div>
           <ReactECharts
+            opts={{ renderer: "svg" }}
             style={{
               height: "180px",
               marginTop: "-24px",
@@ -226,7 +239,6 @@ const Charts = () => {
                     150,
                   ],
                   itemStyle: {
-                    borderRadius: [0, 0, 2, 2],
                     color: "#118FA0",
                   },
                 },
@@ -276,7 +288,14 @@ const Charts = () => {
                     color: "#112029",
                   },
                 },
-              ],
+              ].map((s) => ({
+                ...s,
+                itemStyle: {
+                  ...s.itemStyle,
+                  shadowColor: s.itemStyle.color,
+                  shadowBlur: 1
+                },
+              })),
             }}
           />
         </div>
